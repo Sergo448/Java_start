@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 public class DotCom {
     private ArrayList<String> locationCells;
-    private int numOfHits;
+    private String name;
 
     public void setLocationCells(ArrayList<String> loc) {
         locationCells = loc;
+    }
+
+    public void setName(String n) {
+        name = n;
     }
 
     public String checkYourself(String userInput) {
@@ -19,6 +23,7 @@ public class DotCom {
             
             if (locationCells.isEmpty()) {
                 result = "Killed";
+                System.out.println("Oh! You killed " + name + "  :<");
             } else {
                 result = "Shooted";
             }
