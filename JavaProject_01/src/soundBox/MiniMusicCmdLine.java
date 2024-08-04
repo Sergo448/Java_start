@@ -7,7 +7,7 @@ public class MiniMusicCmdLine {
     public static void main(String[] args) {
         MiniMusicCmdLine mini = new MiniMusicCmdLine();
         if (args.length < 2) {
-            System.out.println("Не забудьте аргумента для инструмента и ноты");
+            System.out.println("Не забудьте аргументы для инструмента и ноты");
         } else {
             int instrument = Integer.parseInt(args[0]);
             int note = Integer.parseInt(args[1]);
@@ -36,7 +36,7 @@ public class MiniMusicCmdLine {
             track.add(noteOn);
 
             ShortMessage b = new ShortMessage();
-            b.setMessage(128, 1, note, 100);1
+            b.setMessage(128, 1, note, 100);
             MidiEvent noteOff = new MidiEvent(b, 16);
             track.add(noteOff);
 
