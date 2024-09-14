@@ -1,17 +1,22 @@
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class SimpleChatClientA {
-    JTextField outgoing;
-    PrintWriter writer;
-    Socket socket;
+    
+    private JFrame mainFrame;
+    private ImageIcon backgroundIcon;
+    private JLabel backgroundLabel;
+    private JButton sendButton;
+    private JTextField outgoing;
+    private PrintWriter writer;
+    private Socket socket;
+
+    private int bgwidth = 650;
+    private int bgheight = 650;
 
     private void setUpNetWorking() {
         try {
@@ -35,23 +40,66 @@ public class SimpleChatClientA {
 
             outgoing.setText("");
             outgoing.requestFocus();
+
+
+            Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent event) {
+                    disposeOfDialog();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+            JOptionPane.showMessageDialog(null, "Massage recieved", "Info massage", JOptionPane.INFORMATION_MESSAGE);
+            }
+    }
+
+    private static void disposeOfDialog() {
+        Window dialogOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+        if (dialogOwner instanceof Dialog) {
+            ((Dialog) dialogOwner).dispose();
+        } else if (dialogOwner instanceof Frame) {
+            ((Frame) dialogOwner).dispose();
         }
     }
 
     public void go() {
-        JFrame frame = new JFrame("Ludicrously Simple Chat Client");
-        JPanel mainPanel = new JPanel();
-        outgoing = new JTextField(20);
-        JButton sendButton = new JButton("Send");
-        sendButton.addActionListener(new SendButtonListener());      
-        
-        mainPanel.add(outgoing);
-        mainPanel.add(sendButton);
-        frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
+
+        // background
+        backgroundIcon = new ImageIcon(this.getClass().getResource("imgs/background.jpg"));
+        backgroundLabel = new JLabel(backgroundIcon);
+        backgroundLabel.setSize(bgwidth, bgheight);
+
+        // sendbutton
+        sendButton = new JButton("Send");
+        sendButton.addActionListener(new SendButtonListener()); 
+        sendButton.setBounds(bgwidth - 150, bgheight - 600, 100, 50);
+        backgroundLabel.add(sendButton);
+
+        // outgoing
+        outgoing = new JTextField();   
+        outgoing.setBounds(50, 50, 400, 50);
+        backgroundLabel.add(outgoing);
+
+        // mainFrame
+        mainFrame = new JFrame("Ludicrously Simple Chat Client");
+        mainFrame.getContentPane().add(BorderLayout.CENTER, backgroundLabel);
+
+        try {
+            ImageIcon icon = new ImageIcon(SimpleChatClientA2.class.getResource("imgs/logo.png"));
+            mainFrame.setIconImage(icon.getImage());
+            } catch (Exception exception) {
+                System.out.println("Ошибка при загрузке изображения");
+                exception.printStackTrace();
+        }
 
         setUpNetWorking();
-        frame.setSize(1000, 700);
-        frame.setVisible(true);
+        
+        mainFrame.setLayout(null);
+        mainFrame.setDefaultCloseOperation(mainFrame.EXIT_ON_CLOSE);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setSize(bgwidth, bgheight);
+        mainFrame.setVisible(true);
     }
     
 
